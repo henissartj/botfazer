@@ -2,6 +2,7 @@ import os
 import random
 import difflib
 import discord
+from dotenv import load_dotenv, dotenv_values
 from discord.ext import commands
 
 # ------- CONFIG -------
@@ -11,10 +12,13 @@ INTENTS = discord.Intents.default()
 INTENTS.members = True
 INTENTS.message_content = True
 
+load_dotenv()
 bot = commands.Bot(command_prefix=PREFIX, intents=INTENTS)
 
 BLOCKED_TARGET_ID = 1429920996080488601
 LOVE_ALLOWED_USER_ID = 1443339902623154207
+ANNOUNCE_CHANNEL_ID = 1443709677212008561
+TWITTER_LOGO_URL = "https://abs.twimg.com/icons/apple-touch-icon-192x192.png"
 
 # Expressions de vaillant
 VAILLANT_REPLIES = [
@@ -222,6 +226,7 @@ async def roll(ctx: commands.Context, minimum: int = 1, maximum: int = 100):
     number = random.randint(minimum, maximum)
     await ctx.send(f"🎲 Tu as tiré **{number}** entre {minimum} et {maximum}. T bon fils.")
 
+
 @bot.command(name="gift")
 async def gift(ctx: commands.Context):
     try:
@@ -233,6 +238,7 @@ async def gift(ctx: commands.Context):
         await user.send("💐 tes forte")
     except Exception:
         pass
+
 
 @bot.command(name="testvaillant")
 async def testvaillant(ctx: commands.Context, member: discord.Member):
@@ -250,15 +256,25 @@ async def testvaillant(ctx: commands.Context, member: discord.Member):
 
 @bot.command(name="tweet")
 async def tweet(ctx: commands.Context, *, texte: str):
-    embed = discord.Embed(description=texte, color=discord.Color.blue())
+    handle = f"@{ctx.author.name.lower()}"
+    embed = discord.Embed(description=texte, color=discord.Color(0x1DA1F2))
+    embed.title = "Twitter"
+    embed.set_thumbnail(url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/1200px-Logo_of_Twitter.svg.png)
     avatar_url = ctx.author.avatar.url if ctx.author.avatar else ctx.author.default_avatar.url
-    embed.set_author(name=ctx.author.display_name, icon_url=avatar_url)
+    embed.set_author(name=f"{ctx.author.display_name} • {handle}", icon_url=avatar_url)
     message = await ctx.send(embed=embed)
     for emoji in ["💬", "🔁", "❤️"]:
         try:
             await message.add_reaction(emoji)
         except Exception:
             pass
+
+
+@bot.command(name="on")
+async def on_cmd(ctx: commands.Context):
+    channel = bot.get_channel(ANNOUNCE_CHANNEL_ID) or await bot.fetch_channel(ANNOUNCE_CHANNEL_ID)
+    await channel.send("Le bot est ON")
+
 
 @bot.command(name="vaillant")
 async def vaillant(ctx: commands.Context, member: discord.Member = None):
@@ -285,7 +301,7 @@ asyncio.run(test_discord())
 # ------- LANCEMENT DU BOT -------
 
 def main():
-    token = os.getenv("DISCORD_BOT_TOKEN")
+    token = os.getenv("DISCORD_BOT_TOKEN") or dotenv_values().get("DISCORD_BOT_TOKEN")
     if not token:
         raise RuntimeError("Variable d’environnement DISCORD_BOT_TOKEN manquante.")
     bot.run(token)
