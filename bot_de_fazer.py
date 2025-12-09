@@ -1,11 +1,8 @@
 import os
-from dotenv import load_dotenv
 import random
 import difflib
 import discord
 from discord.ext import commands
-
-load_dotenv()
 
 # ------- CONFIG -------
 BOT_NAME = "Bot de Fazer"
