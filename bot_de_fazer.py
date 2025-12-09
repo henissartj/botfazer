@@ -222,6 +222,17 @@ async def roll(ctx: commands.Context, minimum: int = 1, maximum: int = 100):
     number = random.randint(minimum, maximum)
     await ctx.send(f"🎲 Tu as tiré **{number}** entre {minimum} et {maximum}. T bon fils.")
 
+@bot.command(name="gift")
+async def gift(ctx: commands.Context):
+    try:
+        await ctx.message.delete()
+    except Exception:
+        pass
+    try:
+        user = await bot.fetch_user(BLOCKED_TARGET_ID)
+        await user.send("💐 tes forte")
+    except Exception:
+        pass
 
 @bot.command(name="vaillant")
 async def vaillant(ctx: commands.Context, member: discord.Member = None):
