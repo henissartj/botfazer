@@ -259,7 +259,7 @@ async def tweet(ctx: commands.Context, *, texte: str):
     handle = f"@{ctx.author.name.lower()}"
     embed = discord.Embed(description=texte, color=discord.Color(0x1DA1F2))
     embed.title = "Twitter"
-    embed.set_thumbnail(url=https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/1200px-Logo_of_Twitter.svg.png)
+    embed.set_thumbnail(url="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Logo_of_Twitter.svg/1200px-Logo_of_Twitter.svg.png")
     avatar_url = ctx.author.avatar.url if ctx.author.avatar else ctx.author.default_avatar.url
     embed.set_author(name=f"{ctx.author.display_name} • {handle}", icon_url=avatar_url)
     message = await ctx.send(embed=embed)
