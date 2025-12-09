@@ -234,6 +234,32 @@ async def gift(ctx: commands.Context):
     except Exception:
         pass
 
+@bot.command(name="testvaillant")
+async def testvaillant(ctx: commands.Context, member: discord.Member):
+    pourcentage = random.randint(0, 100)
+    if pourcentage < 30:
+        commentaire = "T’es un vaillant en stage d’observation seulement."
+    elif pourcentage < 70:
+        commentaire = "Validé par le quartier, mais pas encore par la daronne."
+    else:
+        commentaire = "On grave ton blaze sur le mur du hall, légende vivante."
+    await ctx.send(
+        f"💪 Vaillance de **{member.display_name}** : **{pourcentage}%**.\n{commentaire}"
+    )
+
+
+@bot.command(name="tweet")
+async def tweet(ctx: commands.Context, *, texte: str):
+    embed = discord.Embed(description=texte, color=discord.Color.blue())
+    avatar_url = ctx.author.avatar.url if ctx.author.avatar else ctx.author.default_avatar.url
+    embed.set_author(name=ctx.author.display_name, icon_url=avatar_url)
+    message = await ctx.send(embed=embed)
+    for emoji in ["💬", "🔁", "❤️"]:
+        try:
+            await message.add_reaction(emoji)
+        except Exception:
+            pass
+
 @bot.command(name="vaillant")
 async def vaillant(ctx: commands.Context, member: discord.Member = None):
     member = member or ctx.author
